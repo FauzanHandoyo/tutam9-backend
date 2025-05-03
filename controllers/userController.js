@@ -1,7 +1,7 @@
 // backend/controllers/userController.js
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require('../models/User');
+const User = require('../models/userModel');
 
 exports.register = async (req, res) => {
   const { email, password } = req.body;
