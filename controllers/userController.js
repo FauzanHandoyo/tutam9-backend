@@ -1,64 +1,24 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs'); // Make sure you're using bcryptjs
-const User = require('../models/User');
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
-/**
- * @desc    Register a new user
- * @route   POST /api/users/register
- * @access  Public
- */
-exports.register = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: 'Email already registered' });
-    }
-
-    // Create new user
-    const newUser = new User({ email, password });
-    await newUser.save();
-
-    // Respond with success
-    res.status(201).json({ message: 'User created successfully' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Registration failed' });
+const UserSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: [true, 'Email is required'],
+    unique: true
+  },
+  password: {
+    type: String,
+    required: [true, 'Password is required']
   }
-};
+});
 
-/**
- * @desc    Login user & get token
- * @route   POST /api/users/login
- * @access  Public
- */
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
+// Hash password before saving
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
 
-  try {
-    // Find user by email
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ error: 'Invalid credentials' });
-    }
-
-    // Compare passwords
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid credentials' });
-    }
-
-    // Generate JWT token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '1d',
-    });
-
-    // Send token
-    res.json({ token });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Login failed' });
-  }
-};
+const User = mongoose.model('User', UserSchema);
+module.exports = User;
