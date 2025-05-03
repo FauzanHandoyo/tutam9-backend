@@ -1,7 +1,7 @@
-// backend/index.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const userRoutes = require('./routes/userRoutes'); // Import user routes
 const app = express();
 
 require('dotenv').config();
@@ -22,6 +22,9 @@ db.once('open', () => {
 app.get('/api/data', (req, res) => {
   res.json({ message: "Connected from backend!" });
 });
+
+// User Routes
+app.use('/api/users', userRoutes); // Add user routes
 
 // Export for Vercel
 module.exports = app;
