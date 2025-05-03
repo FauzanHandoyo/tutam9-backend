@@ -1,27 +1,28 @@
-// backend/index.js
+// backend/server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const app = express();
+const dotenv = require('dotenv');
 
-require('dotenv').config();
+dotenv.config();
+
+const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(cors());
 
+// Routes
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/users', userRoutes);
+
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI);
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('✅ Connected to MongoDB Fauzan');
-});
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
-// Sample Route
-app.get('/api/data', (req, res) => {
-  res.json({ message: "Connected from backend!" });
+// Start Server
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
-
-// Export for Vercel
-module.exports = app;
