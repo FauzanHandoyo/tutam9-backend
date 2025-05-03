@@ -1,6 +1,6 @@
 const express = require('express');
-const { registerUser, loginUser, getUserDetails } = require('../controllers/userController');
-const { authenticateUser } = require('../Middleware/userMiddleware');
+const { registerUser, loginUser, getUserDetails } = require('../controllers/userController'); // Correct case
+const { authenticateUser } = require('../middleware/userMiddleware'); // Correct case for 'middleware'
 
 const router = express.Router();
 
