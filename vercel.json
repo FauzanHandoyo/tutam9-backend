@@ -3,7 +3,7 @@
     "name": "tutam9-backend",
     "builds": [
       {
-        "src": "vercel.js",
+        "src": "index.js",
         "use": "@vercel/node"
       }
     ],
