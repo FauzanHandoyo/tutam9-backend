@@ -1,4 +1,4 @@
-const User = require('../models/Usermodel');
+const User = require('../models/userModel'); // Correct case for 'userModel'
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
