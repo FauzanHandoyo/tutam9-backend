@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes'); // Import user routes
+const taskRoutes = require('./routes/taskRoutes'); // Import task routes
 const app = express();
 
 require('dotenv').config();
@@ -25,6 +26,9 @@ app.get('/api/data', (req, res) => {
 
 // User Routes
 app.use('/api/users', userRoutes); // Add user routes
+
+// Task Routes
+app.use('/api/tasks', taskRoutes); // Add task routes
 
 // Export for Vercel
 module.exports = app;
