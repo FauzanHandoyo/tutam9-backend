@@ -8,5 +8,6 @@ const router = express.Router();
 router.post('/add', authenticateUser, addTask);
 router.delete('/:id' , authenticateUser, deleteTask);
 router.put('/:id' , authenticateUser, editTask);
+router.get('/', authenticateUser, getTasks);
 
 module.exports = router;

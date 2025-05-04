@@ -66,3 +66,17 @@ exports.editTask = async (req, res) => {
         res.status(500).json({ message: 'Server error', error });
     }
 };
+
+const fetchTasks = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/tasks`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setTasks(response.data.tasks || []);
+    } catch (err) {
+      console.error('Error fetching tasks:', err);
+    }
+  };
