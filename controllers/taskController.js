@@ -3,13 +3,14 @@ const Task = require('../models/taskModel');
 // Add a new task
 exports.addTask = async (req, res) => {
     try {
-        const { title, description } = req.body;
+        const { title, description, date } = req.body;
 
         // Create a new task
         const newTask = new Task({
             user: req.user.id, // Assuming the user is authenticated
             title,
             description,
+            date, // Add the date field
         });
 
         await newTask.save();
@@ -39,15 +40,14 @@ exports.deleteTask = async (req, res) => {
 
 exports.editTask = async (req, res) => {
     try {
-        const taskId = req.params.id; // Get task ID from the request parameters
-        const userId = req.user.id; // Get user ID from the authenticated user
-        const { title, description, completed } = req.body; // Get updated fields from the request body
+        const taskId = req.params.id;
+        const userId = req.user.id;
+        const { title, description, date, completed } = req.body;
 
-        // Find and update the task
         const updatedTask = await Task.findOneAndUpdate(
-            { _id: taskId, user: userId }, // Ensure the task belongs to the user
-            { title, description, completed }, // Fields to update
-            { new: true } // Return the updated task
+            { _id: taskId, user: userId },
+            { title, description, date, completed }, // Include the date field
+            { new: true }
         );
 
         if (!updatedTask) {
