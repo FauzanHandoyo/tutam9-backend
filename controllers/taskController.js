@@ -5,12 +5,16 @@ exports.addTask = async (req, res) => {
     try {
         const { title, description, date } = req.body;
 
+        // Calculate the day of the week
+        const dayOfWeek = new Date(date).toLocaleDateString('en-US', { weekday: 'long' });
+
         // Create a new task
         const newTask = new Task({
             user: req.user.id, // Assuming the user is authenticated
             title,
             description,
             date, // Add the date field
+            day: dayOfWeek, // Add the day of the week
         });
 
         await newTask.save();
@@ -44,9 +48,12 @@ exports.editTask = async (req, res) => {
         const userId = req.user.id;
         const { title, description, date, completed } = req.body;
 
+        // Calculate the day of the week if the date is provided
+        const dayOfWeek = date ? new Date(date).toLocaleDateString('en-US', { weekday: 'long' }) : undefined;
+
         const updatedTask = await Task.findOneAndUpdate(
             { _id: taskId, user: userId },
-            { title, description, date, completed }, // Include the date field
+            { title, description, date, day: dayOfWeek, completed }, // Include the day field
             { new: true }
         );
 

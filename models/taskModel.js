@@ -16,7 +16,11 @@ const taskSchema = new mongoose.Schema({
         trim: true,
     },
     date: {
-        type: String, // You can use a string to store the day of the week (e.g., "Monday")
+        type: String, // Store the date in YYYY-MM-DD format
+        required: true,
+    },
+    day: {
+        type: String, // Store the day of the week (e.g., Monday)
         required: true,
     },
     completed: {
