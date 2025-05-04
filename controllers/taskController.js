@@ -67,16 +67,16 @@ exports.editTask = async (req, res) => {
     }
 };
 
-const fetchTasks = async () => {
+// Get all tasks for the authenticated user
+exports.getTasks = async (req, res) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/tasks`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setTasks(response.data.tasks || []);
-    } catch (err) {
-      console.error('Error fetching tasks:', err);
+        const userId = req.user.id; // Get the authenticated user's ID
+
+        // Fetch tasks for the user
+        const tasks = await Task.find({ user: userId });
+
+        res.status(200).json({ tasks });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
     }
-  };
+};

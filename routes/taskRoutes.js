@@ -1,5 +1,5 @@
 const express = require('express');
-const { addTask, deleteTask, editTask } = require('../controllers/taskController');
+const { addTask, deleteTask, editTask, getTasks } = require('../controllers/taskController');
 const { authenticateUser } = require('../tempMiddleware/userMiddleware');
 
 const router = express.Router();
